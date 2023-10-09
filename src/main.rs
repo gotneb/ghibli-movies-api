@@ -4,7 +4,7 @@ mod database;
 use std::env;
 use log::info;
 
-use actix_web::{get, post, web, App, Error, HttpResponse, HttpServer, error::ErrorNotFound};
+use actix_web::{get, post, web, App, Error, HttpResponse, HttpServer, error::ErrorNotFound, Responder};
 use database::Database;
 use serde::{Deserialize, Serialize};
 
@@ -17,6 +17,11 @@ struct ErrorResponse {
 
 struct AppState {
     database: Database,
+}
+
+#[get("/")]
+async fn greeting() -> impl Responder {
+    HttpResponse::Ok().body("Hello! The server is working ;)")
 }
 
 #[get("/movie/{searchTitle}")]
@@ -77,6 +82,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(AppState {
                 database: db.clone(),
             }))
+            .service(greeting)
             .service(get_movie)
             .service(add_movie)
             .service(get_movie_by_id)
