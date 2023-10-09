@@ -9,6 +9,7 @@ pub struct Movie {
     id: String,
     title: String,
     original_title: String,
+    poster_title: String,
     poster: String,
     description: String,
     background_poster: String,
@@ -16,6 +17,7 @@ pub struct Movie {
     release_year: u32,
     duration: u32,
     score: f64,
+    trailer: String,
     genres: Vec<String>,
     gallery: Vec<String>,
 }
@@ -27,6 +29,7 @@ impl Movie {
             id: digest(self.title.clone()),
             title: self.title.clone(),
             original_title: self.title.clone(),
+            poster_title: self.poster_title.clone(),
             poster: self.poster.clone(),
             description: self.description.clone(),
             background_poster: self.background_poster.clone(),
@@ -34,6 +37,7 @@ impl Movie {
             release_year: self.release_year,
             duration: self.duration,
             score: self.score,
+            trailer: self.trailer.clone(),
             genres: self.genres.clone(),
             gallery: self.gallery.clone(),
         }

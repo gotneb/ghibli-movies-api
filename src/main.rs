@@ -21,6 +21,7 @@ struct AppState {
 
 #[get("/")]
 async fn greeting() -> impl Responder {
+    info!("handling / (root)");
     HttpResponse::Ok().body("Hello! The server is working ;)")
 }
 
