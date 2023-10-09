@@ -1,6 +1,8 @@
 mod movie;
 mod database;
 
+use std::env;
+
 use actix_web::{
     get, post, web, App, Error, HttpResponse, HttpServer, error::ErrorNotFound, 
 };
@@ -61,6 +63,8 @@ async fn get_movie_by_id(path: web::Path<String>, data: web::Data<AppState>) -> 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let db = Database::new().await;
+    let port = env::var("PORT").expect("PORT not specified!");
+    let port = port.parse::<u16>().unwrap();
 
     let result = HttpServer::new(move || {
         App::new()
@@ -71,7 +75,7 @@ async fn main() -> std::io::Result<()> {
             .service(add_movie)
             .service(get_movie_by_id)
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(("127.0.0.1", port))?
     .run()
     .await;
 
