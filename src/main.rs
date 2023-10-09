@@ -75,7 +75,7 @@ async fn main() -> std::io::Result<()> {
             .service(add_movie)
             .service(get_movie_by_id)
     })
-    .bind(("127.0.0.1", port))?
+    .bind(("0.0.0.0", port))?
     .run()
     .await;
 
