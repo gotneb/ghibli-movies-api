@@ -1,9 +1,8 @@
 # About
-```
-The unofficial and small Studio Ghibli api.
-```
 
-It's `small` cause I don't plan it to have all Studio Ghibli details like world, vehicles, etc... Only the movies.
+> The unofficial and small Studio Ghibli api.
+
+It's `small` cause I don't plan it to have all Studio Ghibli details like world, vehicles, characters, etc... Only the movies.
 
 ![Banner Repository](https://github.com/gotneb/ghibli-movies-api/blob/master/repo_banner.png)
 
@@ -12,7 +11,7 @@ It's `small` cause I don't plan it to have all Studio Ghibli details like world,
 ### Path: https://studio-ghibli-movies-api.onrender.com
 
 ### Search (GET)
-Searches a movie by its title. Reuturns a list of all results found.
+Searches a movie by its title. Returns a list of all results found.
 ```
 /movie/:searchTerm
 ```
