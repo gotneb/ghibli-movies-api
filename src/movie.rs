@@ -1,7 +1,10 @@
-use std::{fmt::Display, io::{Error, ErrorKind}};
+use std::{
+    fmt::Display,
+    io::{Error, ErrorKind},
+};
 
-use sha256::digest;
 use serde::{Deserialize, Serialize};
+use sha256::digest;
 
 #[derive(Deserialize, Serialize)]
 pub struct Movie {
@@ -21,44 +24,20 @@ pub struct Movie {
 
 impl Movie {
     /// Creates a new [Movie] with constraints
-    pub fn build(
-        title: String,
-        poster: String,
-        description: String,
-        background_poster: String,
-        director: String,
-        release_year: u32,
-        duration: u32,
-        score: f64,
-        genres: Vec<String>,
-        gallery: Vec<String>,
-    ) -> Result<Self, Error> {
-        let texts = vec![&title, &poster, &description, &background_poster, &director];
-        let are_empty_texts = texts.iter().any(|text| text.len() == 0);
-        
-        // Verifies if all fields are right
-        if  are_empty_texts || 
-            gallery.len() < 9 || 
-            score <= 0. || 
-            genres.len() <= 0 {
-            return Err(Error::new(
-                ErrorKind::Other, format!("Can't add movie. One or more fields are empties or negatives")
-            ))
+    pub fn from(&self) -> Self {
+        Self {
+            id: digest(self.title.clone()),
+            title: self.title.clone(),
+            poster: self.poster.clone(),
+            description: self.description.clone(),
+            background_poster: self.background_poster.clone(),
+            director: self.director.clone(),
+            release_year: self.release_year,
+            duration: self.duration,
+            score: self.score,
+            genres: self.genres.clone(),
+            gallery: self.gallery.clone(),
         }
-
-        Ok(Self {
-            id: digest(title.clone()),
-            title,
-            poster,
-            background_poster,
-            description,
-            director,
-            release_year,
-            duration,
-            score,
-            genres,
-            gallery,
-        })
     }
 }
 
