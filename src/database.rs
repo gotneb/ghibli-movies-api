@@ -32,7 +32,7 @@ impl Database {
         }
     }
 
-    /// Searches for a given title into database
+    /// Searches for many movies related to a given title into database
     pub async fn search(&self, title: &String) -> Option<Vec<Movie>> {
         // This query only works if an index is already created in MongoDB
         // Otherwise `find` method panics!
@@ -51,7 +51,7 @@ impl Database {
             if !cursor.advance().await.unwrap() {
                 break
             }
-            
+
             match cursor.deserialize_current() {
                 Ok(doc) => {
                     if let Ok(movie) = bson::from_bson::<Movie>(Bson::Document(doc)) {
@@ -62,9 +62,35 @@ impl Database {
             }
         }
 
-        Some(movies)
+        if movies.len() > 0 {Some(movies)} else {None}
     }
 
+    /// Find a movie by its id
+    pub async fn find_id(&self, id: &String) -> Option<Movie> {
+        let query = doc! { 
+            "id": id
+        };
+    
+        let result: Option<Document> = self.client
+            .database(&self.db_name)
+            .collection(&self.coll_name)
+            .find_one(Some(query), None)
+            .await
+            .unwrap();
+    
+        match result {
+            Some(doc) => {
+                if let Ok(movie) = bson::from_bson::<Movie>(Bson::Document(doc)) {
+                    Some(movie)
+                } else {
+                    None
+                }
+            },
+            None => None,
+        }
+    }
+
+    /// Add a new manga movie into database
     pub async fn add(&self, movie: &Movie) -> Result<(), io::Error> {
         let movie = bson::to_document(&movie);
 
@@ -80,6 +106,16 @@ impl Database {
                 Ok(())
             },
             Err(err) => Err(io::Error::new(io::ErrorKind::Other, format!("MongoDB insertion error: {}", err))),
+        }
+    }
+}
+
+impl Clone for Database {
+    fn clone(&self) -> Self {
+        Self {
+            client: self.client.clone(),
+            db_name: self.db_name.clone(),
+            coll_name: self.coll_name.clone(),
         }
     }
 }
