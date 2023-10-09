@@ -42,6 +42,6 @@ impl Movie {
 
 impl Display for Movie {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{} | {} | {}", self.title, self.score, self.release_year)
+        write!(f, "{} - {} ", self.title, self.original_title)
     }
 }
