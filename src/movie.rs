@@ -1,12 +1,12 @@
 use std::{fmt::Display, io::{Error, ErrorKind}};
 
-use bson::oid::ObjectId;
+use sha256::digest;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 pub struct Movie {
-    #[serde(rename = "_id")]
-    id: ObjectId,
+    #[serde(default)]
+    id: String,
     title: String,
     poster: String,
     description: String,
@@ -47,7 +47,7 @@ impl Movie {
         }
 
         Ok(Self {
-            id: ObjectId::new(),
+            id: digest(title.clone()),
             title,
             poster,
             background_poster,
