@@ -1,7 +1,4 @@
-use std::{
-    fmt::Display,
-    io::{Error, ErrorKind},
-};
+use std::fmt::Display;
 
 use serde::{Deserialize, Serialize};
 use sha256::digest;
@@ -11,6 +8,7 @@ pub struct Movie {
     #[serde(default)]
     id: String,
     title: String,
+    original_title: String,
     poster: String,
     description: String,
     background_poster: String,
@@ -28,6 +26,7 @@ impl Movie {
         Self {
             id: digest(self.title.clone()),
             title: self.title.clone(),
+            original_title: self.title.clone(),
             poster: self.poster.clone(),
             description: self.description.clone(),
             background_poster: self.background_poster.clone(),

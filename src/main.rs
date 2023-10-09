@@ -62,7 +62,7 @@ async fn get_movie_by_id(path: web::Path<String>, data: web::Data<AppState>) -> 
 async fn main() -> std::io::Result<()> {
     let db = Database::new().await;
 
-    HttpServer::new(move || {
+    let result = HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(AppState {
                 database: db.clone(),
@@ -75,5 +75,5 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await;
 
-    Ok(())
+    result
 }
