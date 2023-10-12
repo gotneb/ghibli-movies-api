@@ -7,8 +7,12 @@ use sha256::digest;
 pub struct Movie {
     #[serde(default)]
     id: String,
+    // English title
     title: String,
+    // Japanese title
     original_title: String,
+    // Romaji title
+    alternative_title: String,
     poster_title: String,
     poster: String,
     description: String,
@@ -29,6 +33,7 @@ impl Movie {
             id: digest(self.title.clone()),
             title: self.title.clone(),
             original_title: self.title.clone(),
+            alternative_title: self.alternative_title.clone(),
             poster_title: self.poster_title.clone(),
             poster: self.poster.clone(),
             description: self.description.clone(),
