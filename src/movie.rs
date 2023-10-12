@@ -28,12 +28,12 @@ pub struct Movie {
 }
 
 impl Movie {
-    /// Creates a new [Movie] with constraints
+    /// Creates a new [Movie]
     pub fn from(&self) -> Self {
         Self {
             id: digest(self.title.clone()),
             title: self.title.clone(),
-            original_title: self.title.clone(),
+            original_title: self.original_title.clone(),
             alternative_title: self.alternative_title.clone(),
             title_image: self.title_image.clone(),
             poster: self.poster.clone(),
