@@ -25,7 +25,7 @@ async fn greeting() -> impl Responder {
     HttpResponse::Ok().body("Hello! The server is working ;)")
 }
 
-#[get("/movie/{searchTitle}")]
+#[get("/movies/search/{searchTitle}")]
 async fn get_movie(path: web::Path<String>, data: web::Data<AppState>) -> Result<HttpResponse, Error> {
     let search_title = path.into_inner();
     info!("handling /movie/{}", search_title);
@@ -42,7 +42,27 @@ async fn get_movie(path: web::Path<String>, data: web::Data<AppState>) -> Result
     }
 }
 
-#[post("/movie/add")]
+#[get("/movies/random")]
+async fn get_random_movie(data: web::Data<AppState>) -> Result<HttpResponse, Error> {
+    if let Some(movie) = data.database.get_random().await {
+        Ok(HttpResponse::Ok().json(movie))
+    } else {
+        Err(ErrorNotFound("No movie found"))
+    }
+}
+
+#[get("/movies/all")]
+async fn get_all_movies(data: web::Data<AppState>) -> Result<HttpResponse, Error> {
+    info!("handling /movie/all");
+
+    if let Some(movies) = &data.database.all_movies().await {
+        Ok(HttpResponse::Ok().json(movies))
+    } else {
+        Err(ErrorNotFound("No movie found"))
+    }
+}
+
+#[post("/movies/add")]
 async fn add_movie(info: web::Json<Movie>, data: web::Data<AppState>) -> Result<HttpResponse, Error> {
     let movie = Movie::from(&info.0);
 
@@ -53,7 +73,7 @@ async fn add_movie(info: web::Json<Movie>, data: web::Data<AppState>) -> Result<
     }
 }
 
-#[get("/movie/id/{id}")]
+#[get("/movies/get/{id}")]
 async fn get_movie_by_id(path: web::Path<String>, data: web::Data<AppState>) -> Result<HttpResponse, Error> {
     let id = path.into_inner();
     info!("handling /movie/id/{}", id);
@@ -87,6 +107,8 @@ async fn main() -> std::io::Result<()> {
             .service(get_movie)
             .service(add_movie)
             .service(get_movie_by_id)
+            .service(get_all_movies)
+            .service(get_random_movie)
     })
     .bind(("0.0.0.0", port))?
     .run()
