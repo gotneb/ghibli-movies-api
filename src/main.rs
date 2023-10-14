@@ -4,6 +4,7 @@ mod database;
 use std::env;
 use log::info;
 
+use actix_cors::Cors;
 use actix_web::{get, post, web, App, Error, HttpResponse, HttpServer, error::ErrorNotFound, Responder};
 use database::Database;
 use serde::{Deserialize, Serialize};
@@ -100,13 +101,14 @@ async fn main() -> std::io::Result<()> {
     let port = env::var("PORT").expect("PORT not specified!");
     let port = port.parse::<u16>().unwrap();
 
-    info!("server sucessfully started at port: {}", port);
+    info!("server successfully started at port: {}", port);
 
     let result = HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(AppState {
                 database: db.clone(),
             }))
+            .wrap(Cors::permissive()) // Apply the Cors middleware
             .service(greeting)
             .service(get_movie)
             .service(add_movie)
