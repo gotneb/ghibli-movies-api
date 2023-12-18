@@ -6,6 +6,8 @@ It's `small` cause I don't plan it to have all Studio Ghibli details like world,
 
 ![Banner Repository](https://github.com/gotneb/ghibli-movies-api/blob/master/repo_banner.png)
 
+⚠️ I use a **free plan** for the hosting, so the server sleeps after **15 minutes of inactive.** So only the first request takes a while...
+
 ## Routes
 
 ### Path: https://studio-ghibli-movies-api.onrender.com
